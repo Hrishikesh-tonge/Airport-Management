@@ -102,6 +102,7 @@ def booking():
                     st.write(row[0])
                 
                 
+                
                 st.divider()
                 query_flightno = "select flight_id from flights where (scity = %s and destination_city = %s) and date=%s "
                 val = (src,dest,dt)
@@ -120,6 +121,7 @@ def booking():
                 st.subheader("To")
 
             with col3:
+               
                 query_flightno = "select destination_id from flights where (scity = %s and destination_city = %s) and date=%s "
                 val = (src,dest,dt)
                 cursor.execute(query_flightno,val)
@@ -155,6 +157,13 @@ def booking():
                 st.write('Price Rs.')
                 for row in flres:
                     st.subheader(row[0])
+                
+                query_flightno = "select date from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.write(row[0])
                 
                 
             if "confirmation" not in st.session_state:
