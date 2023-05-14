@@ -5,7 +5,7 @@ from streamlit_option_menu import option_menu
 import streamlit as st
 from streamlit_lottie import st_lottie
 from streamlit_extras.switch_page_button import switch_page
-
+import pandas as pd
 from streamlit_extras import *
 
 headerSection = st.container()
@@ -35,10 +35,10 @@ def login(username,password):
 
 def confirm():
     
-    st.session_state.booking = True
+    st.session_state.booking = False
     with confirmationSection:
-        
-        st.write("Confirm booking")
+        if st.session_state["confirmation"] == True:
+            st.write("Confirm booking")
 
 # def search_flights(src,dest,dt):
 #     with searchSection:
@@ -55,6 +55,7 @@ def confirm():
             
             
 def booking():
+    st.session_state['booking'] = True
     with bookingSection:
         col1, col2, col3= st.columns(3)
         with col1:
@@ -71,18 +72,122 @@ def booking():
         if 'booking' not in st.session_state:
             st.session_state['booking'] = False
         if st.button("Search Flights"):
-            query = "select * from flights where (scity = %s and destination_city = %s) and date=%s "
-            val = (src,dest,dt)
 
-            cursor.execute(query,val)
-            flres = cursor.fetchall()
+            col1, col2, col3 = st.columns(3)
+            #For flight number
+            with col1:
+                query_flightno = "select source_id from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.subheader(row[0])
+                query_flightno = "select scity from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.subheader(row[0])
+                query_flightno = "select source from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.write(row[0])
+                query_flightno = "select departure_time from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.write(row[0])
+                
+                
+                st.divider()
+                query_flightno = "select flight_id from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.title(row[0])
+                query_flightno = "select airline from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.write(row[0])
+                
+               
+
+                
+               
+                
+                
+
+
+            with col2:
+                st.subheader("To")
+               
+                
+                
+                
+
+            with col3:
+                query_flightno = "select destination_id from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.subheader(row[0])
+                query_flightno = "select destination_city from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.subheader(row[0])
+                query_flightno = "select destination from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.write(row[0])
+                query_flightno = "select arrival_time from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                for row in flres:
+                    st.write(row[0])
+
+                
+                st.divider()
+
+                query_flightno = "select price from flights where (scity = %s and destination_city = %s) and date=%s "
+                val = (src,dest,dt)
+                cursor.execute(query_flightno,val)
+                flres = cursor.fetchall()
+                st.write('Price Rs.')
+                for row in flres:
+                    st.subheader(row[0])
+                
+                
+                
+                    
+
+                
+                
+
+              
+
+
+              
             
-            for row in flres:
-                st.table(row)
-
             if "confirmation" not in st.session_state:
-                st.session_state.confirmation = False
-            st.button(label="Book",on_click=BookingClicked)
+                st.session_state["confirmation"] = False
+            book = st.button("Book")
+            if book:
+                switch_page("AdminLogin")
+
+
+                
     
 
 def BookingClicked():
@@ -94,6 +199,8 @@ def LoggedInClicked(username,password):
     if login(username,password):
         st.success("Login Successful")
         st.session_state['loggedIn'] = True
+        if 'booking' not in st.session_state:
+            st.session_state['booking'] = False
     else:
         st.session_state['loggedIn'] = False
         st.error("Invalid creds")
@@ -117,8 +224,7 @@ with headerSection:
     # End of header gif
 
     
-    if 'loggedIn' not in st.session_state:
-        
+    if 'loggedIn' not in st.session_state:  
         tab1, tab2 =st.tabs(["Offers","Tourist_Destination"])
 
         with tab1:

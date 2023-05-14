@@ -16,7 +16,7 @@ def operate():
     st.write("Welcome Admin")
     
 def login(username,password):
-    sql = "select passwd from pass_login where id = %s"
+    sql = "select pwd from admin where user_id = %s"
     value = (username,)
     cursor.execute(sql,value)
     passw = cursor.fetchall()
@@ -38,3 +38,7 @@ with loginSection:
     username = st.text_input(label="Username")
     password = st.text_input(label="Password",type='password')
     st.button("Login",on_click=LoggedInClicked,args=(username,password))
+    
+    if 'loggedIn' not in st.session_state:
+        login
+ 
