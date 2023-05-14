@@ -116,20 +116,8 @@ def booking():
                 for row in flres:
                     st.write(row[0])
                 
-               
-
-                
-               
-                
-                
-
-
             with col2:
                 st.subheader("To")
-               
-                
-                
-                
 
             with col3:
                 query_flightno = "select destination_id from flights where (scity = %s and destination_city = %s) and date=%s "
@@ -169,17 +157,6 @@ def booking():
                     st.subheader(row[0])
                 
                 
-                
-                    
-
-                
-                
-
-              
-
-
-              
-            
             if "confirmation" not in st.session_state:
                 st.session_state["confirmation"] = False
             book = st.button("Book")
