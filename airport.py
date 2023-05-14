@@ -7,7 +7,7 @@ from streamlit_lottie import st_lottie
 from streamlit_extras.switch_page_button import switch_page
 import pandas as pd
 from streamlit_extras import *
-
+from datetime import date
 headerSection = st.container()
 mainSection = st.container()
 loginSection = st.container()
@@ -15,7 +15,7 @@ logOutSection = st.container()
 searchSection = st.container()
 bookingSection = st.container()
 confirmationSection = st.container()
-
+today = date.today()
 cnx = mysql.connector.connect(
     user="root",
     password="Titanium@1604",
@@ -60,17 +60,22 @@ def booking():
         col1, col2, col3= st.columns(3)
         with col1:
             src = st.text_input("Enter source")
+            
         
                 
         with col2:
             dest = st.text_input("Destination")
             
         with col3:
-            dt = st.date_input(label="When")
-
+            dt = st.date_input(label="When",min_value=today)
+        
+        if src == "" and dest == "":
+            st.error("Enter Source and Destination")
+            
     
         if 'booking' not in st.session_state:
             st.session_state['booking'] = False
+            
         if st.button("Search Flights"):
 
             col1, col2, col3 = st.columns(3)
@@ -165,12 +170,14 @@ def booking():
                 for row in flres:
                     st.write(row[0])
                 
+              
+                
                 
             if "confirmation" not in st.session_state:
                 st.session_state["confirmation"] = False
-            book = st.button("Book")
-            if book:
-                switch_page("AdminLogin")
+            st.button("Book",on_click=BookingClicked)
+            
+                
 
 
                 
