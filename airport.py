@@ -4,12 +4,17 @@ import mysql.connector
 from streamlit_option_menu import option_menu
 import streamlit as st
 from streamlit_lottie import st_lottie
+from streamlit_extras.switch_page_button import switch_page
+
+from streamlit_extras import *
 
 headerSection = st.container()
 mainSection = st.container()
 loginSection = st.container()
 logOutSection = st.container()
 searchSection = st.container()
+bookingSection = st.container()
+confirmationSection = st.container()
 
 cnx = mysql.connector.connect(
     user="root",
@@ -27,43 +32,63 @@ def login(username,password):
         return True
     else:
         return False
-    
-def search_flights(src,dest,dt):
-    with searchSection:
-        st.session_state['booking']=True
-        query = "select * from flights where (scity = %s and destination_city = %s) and date = %s"
-        val = (src,dest,dt)
 
-        cursor.execute(query,val)
-        flres = cursor.fetchall()
-        if st.session_state['booking'] == True:
-            for row in flres:
-                st.write(row)
-def booking():
-  
-    col1, col2, col3= st.columns(3)
-    with col1:
-        src = st.text_input("Enter source")
+def confirm():
     
+    st.session_state.booking = True
+    with confirmationSection:
+        
+        st.write("Confirm booking")
+
+# def search_flights(src,dest,dt):
+#     with searchSection:
+#         st.session_state['booking']=True
+#         query = "select * from flights where (scity = %s and destination_city = %s) and date = %s"
+#         val = (src,dest,dt)
+
+#         cursor.execute(query,val)
+#         flres = cursor.fetchall()
+#         if st.session_state['booking'] == True:
+#             for row in flres:
+#                 st.write(row)
+        
             
-    with col2:
-        dest = st.text_input("Destination")
-         
-    with col3:
-        dt = st.date_input(label="When")
+            
+def booking():
+    with bookingSection:
+        col1, col2, col3= st.columns(3)
+        with col1:
+            src = st.text_input("Enter source")
+        
+                
+        with col2:
+            dest = st.text_input("Destination")
+            
+        with col3:
+            dt = st.date_input(label="When")
 
-  
-    if 'booking' not in st.session_state:
-        st.session_state['booking'] = False
-    if st.button("Search Flights"):
-        query = "select * from flights where (scity = %s and destination_city = %s) and date=%s "
-        val = (src,dest,dt)
+    
+        if 'booking' not in st.session_state:
+            st.session_state['booking'] = False
+        if st.button("Search Flights"):
+            query = "select * from flights where (scity = %s and destination_city = %s) and date=%s "
+            val = (src,dest,dt)
 
-        cursor.execute(query,val)
-        flres = cursor.fetchall()
+            cursor.execute(query,val)
+            flres = cursor.fetchall()
+            
+            for row in flres:
+                st.table(row)
 
-        for row in flres:
-            st.table(row)
+            if "confirmation" not in st.session_state:
+                st.session_state.confirmation = False
+            st.button(label="Book",on_click=BookingClicked)
+    
+
+def BookingClicked():
+    st.session_state['confirmation'] = True
+    confirm()
+                      
 
 def LoggedInClicked(username,password):
     if login(username,password):
@@ -81,9 +106,6 @@ def passenger_login():
             password = st.text_input(label="Password",type='password')
             st.button("Login",on_click=LoggedInClicked,args=(username,password))
     
-
-
-
 with headerSection:
     # Start of header gif
     url = requests.get("https://assets1.lottiefiles.com/packages/lf20_npJF362rsV.json")
@@ -106,7 +128,7 @@ with headerSection:
             st.header("Cabs:taxi:")
             col1.metric("Cabs","OLA Bookings","Get 10% Off")
             
-            st.image('1.jpeg')
+            st.image('3.jpeg')
         with col2:
             st.header("Hotels:hotel:")
             col2.metric("Hotels","Pre-Bookings","Get 15% Off")
@@ -116,7 +138,7 @@ with headerSection:
             st.header("Flights:airplane_departure:")
             col3.metric("Flight_offers","Domestic","Get 12% Off")
            
-            st.image('3.jpeg')
+            st.image('1.jpeg')
         with tab2:
             st.text("Destinationas")
             col1, col2, col3=st.columns(3)
@@ -141,6 +163,8 @@ with headerSection:
             st.image("manali.jpg")
             st.session_state['loggedIn'] = False
             passenger_login()   
+    
+        
         
     else:
         if st.session_state['loggedIn']:  # admin , cust .. log in --> cust

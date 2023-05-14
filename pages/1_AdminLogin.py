@@ -9,6 +9,12 @@ cnx = mysql.connector.connect(
     database="airport"
 )
 cursor = cnx.cursor()
+
+loginSection = st.container()
+def operate():
+    
+    st.write("Welcome Admin")
+    
 def login(username,password):
     sql = "select passwd from pass_login where id = %s"
     value = (username,)
@@ -21,10 +27,14 @@ def login(username,password):
 def LoggedInClicked(username,password):
     if login(username,password):
         st.success("Login Successful")
+        operate()
         st.session_state['loggedIn'] = True
     else:
         st.session_state['loggedIn'] = False
         st.error("Invalid creds")
-username = st.text_input(label="Username")
-password = st.text_input(label="Password",type='password')
-st.button("Login",on_click=LoggedInClicked,args=(username,password))
+
+with loginSection:
+    st.session_state["loggedIn"] = False
+    username = st.text_input(label="Username")
+    password = st.text_input(label="Password",type='password')
+    st.button("Login",on_click=LoggedInClicked,args=(username,password))
