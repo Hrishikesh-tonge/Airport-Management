@@ -6,7 +6,7 @@ import streamlit as st
 from streamlit_lottie import st_lottie
 from streamlit_extras.switch_page_button import switch_page
 import pandas as pd
-from streamlit_extras import *
+# from streamlit_extras import *
 from datetime import date
 headerSection = st.container()
 mainSection = st.container()
@@ -18,13 +18,13 @@ confirmationSection = st.container()
 today = date.today()
 cnx = mysql.connector.connect(
     user="root",
-    password="Titanium@1604",
+    password="Krishna@9011",
     host="localhost",
     database="airport"
 )
 cursor = cnx.cursor()
 def login(username,password):
-    sql = "select passwd from pass_login where id = %s"
+    sql = "select password from users where email_id = %s"
     value = (username,)
     cursor.execute(sql,value)
     passw = cursor.fetchall()
@@ -53,7 +53,9 @@ def confirm():
 #                 st.write(row)
         
             
-            
+
+def incr():
+    st.session_state.pax += 1
 def booking():
     st.session_state['booking'] = True
     with bookingSection:
@@ -67,7 +69,7 @@ def booking():
             dest = st.text_input("Destination")
             
         with col3:
-            dt = st.date_input(label="When",min_value=today)
+            dt = st.date_input(label="Travelling Date",min_value=today)
         
         if src == "" and dest == "":
             st.error("Enter Source and Destination")
@@ -162,6 +164,9 @@ def booking():
                 st.write('Price Rs.')
                 for row in flres:
                     st.subheader(row[0])
+                    
+
+
                 
                 query_flightno = "select date from flights where (scity = %s and destination_city = %s) and date=%s "
                 val = (src,dest,dt)
@@ -169,13 +174,58 @@ def booking():
                 flres = cursor.fetchall()
                 for row in flres:
                     st.write(row[0])
+            
+        st.divider()
+        # if st.button("Book"):
+        #     switch_page("Booking")
+        with st.container():
+            st.number_input("Enter Number of passengers",key="pass_number",min_value=1,max_value=5,value=int(1))
+            option = st.selectbox(
+                            'Select Class',
+                            ('Economy', 'Business', 'First Class'))
+            query_flightno = "select price from flights where (scity = %s and destination_city = %s) and date=%s "
+            val = (src,dest,dt)
+            cursor.execute(query_flightno,val)
+            flres = cursor.fetchall()
+            for row in flres:
+                    st.subheader(int(row[0])*st.session_state.pass_number)
+                    price=int(row[0])*st.session_state.pass_number
+                    # st.write(price)
+            # st.button("Book")
+            if st.button("Book"):
+                switch_page("Booking")
+            # with st.form(key='form2'):
+            #             if 'pax' not in st.session_state:
+            #                 st.session_state.pax = 0
+
+            #             st.session_state.pax =st.number_input("Enter Number of passengers",min_value=1,max_value=5,value=int(1))
+            #             query_flightno = "select price from flights where (scity = %s and destination_city = %s) and date=%s "
+            #             val = (src,dest,dt)
+            #             cursor.execute(query_flightno,val)
+            #             flres = cursor.fetchall()
+            #             # st.write('Price Rs.')
+            #             # for row in flres:
+            #             #     pp = (row[0])
+                        
+            #             # st.write(pp)
+            #             # st.write(st.session_state.pax)
+            #             option = st.selectbox(
+            #                 'Select Class',
+            #                 ('Economy', 'Business', 'First Class'))
+                        
+
+            #             st.form_submit_button() 
+            #             if st.form_submit_button():     
+            #                 if 'pax' not in st.session_state:
+            #                     total = int(row[0])*st.session_state.pax
+            #                     st.subheader(int(row[0])*int(st.session_state.pax)) 
+
+                        
+            #                 st.write("hi")            
                 
-              
-                
-                
-            if "confirmation" not in st.session_state:
-                st.session_state["confirmation"] = False
-            st.button("Book",on_click=BookingClicked)
+            # if "confirmation" not in st.session_state:
+            #     st.session_state["confirmation"] = False
+            # st.button("Book",on_click=BookingClicked)
             
                 
 
@@ -190,7 +240,7 @@ def BookingClicked():
 
 def LoggedInClicked(username,password):
     if login(username,password):
-        st.success("Login Successful")
+        st.success("Welcome {}".format(username))
         st.session_state['loggedIn'] = True
         if 'booking' not in st.session_state:
             st.session_state['booking'] = False
@@ -205,9 +255,11 @@ def passenger_login():
             username = st.text_input(label="Username")
             password = st.text_input(label="Password",type='password')
             st.button("Login",on_click=LoggedInClicked,args=(username,password))
+            # if st.button("Sign up"):
+            #     switch_page("SignUp")
     
 with headerSection:
-    # Start of header gif
+    #Start of header gif
     url = requests.get("https://assets1.lottiefiles.com/packages/lf20_npJF362rsV.json")
     url_json = dict()
     if url.status_code == 200:
@@ -271,4 +323,3 @@ with headerSection:
         else:
             passenger_login()
             
-    

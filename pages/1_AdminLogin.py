@@ -14,7 +14,7 @@ dataFrameSerialization = "legacy"
 # st.title("Admin Login")
 cnx = mysql.connector.connect(
     user="root",
-    password="Titanium@1604",
+    password="Krishna@9011",
     host="localhost",
     database="airport"
 )
@@ -41,7 +41,7 @@ def admin_login():
     # st.write("lsf")
     with loginSection:
         if st.session_state['aloggedIn'] == False:
-            st.header("Admin Login")
+            st.header("Admin Login") 
             username = st.text_input(label="Username")
             password = st.text_input(label="Password",type='password')
             st.button("Login",on_click=aLoggedInClicked,args=(username,password))
@@ -53,8 +53,6 @@ with headerSection:
         url_json = url.json()
     st.title("AIRLINE MANAGEMENT SYSTEM :airplane:")
     st_lottie(url_json)
-
-
 
     if 'aloggedIn'not in st.session_state:
         st.session_state['aloggedIn']=False
@@ -91,6 +89,11 @@ with headerSection:
                         # cursor.execute(query,arg)
                         # cnx.commit()
                         st.success("Successfully {} Flight Added".format(Flight_id))
+            if st.button("loggout"):
+                st.session_state['aloggedIn']=False
+                admin_login()
+                st.success("Successfully LoggedOut")
+
 
             with tab2:
                 if st.button("Show Flights"):
@@ -111,6 +114,8 @@ with headerSection:
 
         else:
             admin_login()
+
+        
 
 
         
