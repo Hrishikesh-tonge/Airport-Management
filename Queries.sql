@@ -15,9 +15,12 @@ PRICE INT NOT NULL,
 `DATE` DATE NOT NULL,
 AIRLINE VARCHAR(20)
 );
-SELECT * FROM FLIGHT_DETAILS;
+select airport_name from source_dest where airport_id = "nag";
 desc FLIGHT_DETAILS;
 desc FLIGHT_ids;
+SELECT * FROM FLIGHT_DETAILS;
+select * from FLIGHT_ids;
+select * from source_dest;
 select * from userdetails;
 select * from users;
 truncate users;
