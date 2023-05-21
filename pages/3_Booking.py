@@ -7,8 +7,8 @@ from streamlit_lottie import st_lottie
 
 cnx = mysql.connector.connect(
     user="root",
-    password="Krishna@9011",
-    # password="Titanium@1604",
+    #password="Krishna@9011",
+    password="Titanium@1604",
     host="localhost",
     database="airport"
 )
@@ -16,6 +16,12 @@ cursor = cnx.cursor()
 
 with st.container():
     col1, col2, col3 =st.columns(3)
+    # if "src1" not in st.session_state:
+    #     st.session_state.src1 = ""
+    # if "dest1" not in st.session_state:
+    #     st.session_state.dest1 = ""
+    # if "date1" not in st.session_state:
+    #     st.session_state.date1 = 
     with col1:
         # st.success(" {} SignUp Successfully ".format(st.session_state.name1))
         query_flightno = "select scity from flights where (scity = %s and destination_city = %s) and date=%s "
@@ -84,6 +90,6 @@ with st.container():
             flres = cursor.fetchall()
             for row in flres:
                 st.write(row[0])
-st.write("Click the Belove Button For Confirmation")
+st.write("Click the Below Button For Confirmation")
 st.button("Confirm")
         

@@ -18,18 +18,26 @@ confirmationSection = st.container()
 today = date.today()
 cnx = mysql.connector.connect(
     user="root",
-    password="Krishna@9011",
-    # password="Titanium@1604",
+    #password="Krishna@9011",
+    password="Titanium@1604",
     host="localhost",
     database="airport"
 )
 cursor = cnx.cursor()
 def login(username,password):
-    sql = "select password from users where email_id = %s"
+    sql = "select password from users where username = %s"
     value = (username,)
     cursor.execute(sql,value)
     passw = cursor.fetchall()
-    if passw[0][0] == password:
+   
+    st.write(passw[0][0])
+    sql1 = "select md5(%s)"
+    value1 = (password,)
+    cursor.execute(sql1,value1)
+    md5passw = cursor.fetchall()
+    
+    st.write(md5passw[0][0])
+    if md5passw[0][0] == passw[0][0]:
         return True
     else:
         return False
@@ -179,7 +187,7 @@ def booking():
             option = st.selectbox(
                             'Select Class',
                             ('Economy', 'Business', 'First Class'))
-            query_flightno = "select price from flights where (scity = %s and destination_city = %s) and date=%s "
+            query_flightno = "select price from FLIGHT_DETAILS where (source_id = %s and destination_id = %s) and date=%s "
             val = (src,dest,dt)
             cursor.execute(query_flightno,val)
             flres = cursor.fetchall()
