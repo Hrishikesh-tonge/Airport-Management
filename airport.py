@@ -18,8 +18,8 @@ confirmationSection = st.container()
 today = date.today()
 cnx = mysql.connector.connect(
     user="root",
-    #password="Krishna@9011",
-    password="Titanium@1604",
+    password="Krishna@9011",
+    # password="Titanium@1604",
     host="localhost",
     database="airport"
 )
@@ -90,25 +90,33 @@ def booking():
             col1, col2, col3 = st.columns(3)
             #For flight number
             with col1:
-                query_flightno = "select source_id from flights where (scity = %s and destination_city = %s) and date=%s "
+                query_flightno = """select fd.flight_id,fd.departure_time,fd.arrival_time,fd.price,fd.date,fd.airline from flight_details fd inner join 
+flight_ids fid on fd.flight_id=fid.flight_id where
+(fid.source_id=%s and fid.destination_id=%s) and fd.date=%s;"""
                 val = (src,dest,dt)
                 cursor.execute(query_flightno,val)
                 flres = cursor.fetchall()
                 for row in flres:
                     st.subheader(row[0])
-                query_flightno = "select scity from flights where (scity = %s and destination_city = %s) and date=%s "
+                query_flightno = """select fd.departure_time from flight_details fd inner join 
+flight_ids fid on fd.flight_id=fid.flight_id where
+(fid.source_id=%s and fid.destination_id=%s) and fd.date=%s;"""
                 val = (src,dest,dt)
                 cursor.execute(query_flightno,val)
                 flres = cursor.fetchall()
                 for row in flres:
                     st.subheader(row[0])
-                query_flightno = "select source from flights where (scity = %s and destination_city = %s) and date=%s "
+                query_flightno = """select fd.arrival_time from flight_details fd inner join 
+flight_ids fid on fd.flight_id=fid.flight_id where
+(fid.source_id=%s and fid.destination_id=%s) and fd.date=%s;"""
                 val = (src,dest,dt)
                 cursor.execute(query_flightno,val)
                 flres = cursor.fetchall()
                 for row in flres:
                     st.write(row[0])
-                query_flightno = "select departure_time from flights where (scity = %s and destination_city = %s) and date=%s "
+                query_flightno = """select fd.price from flight_details fd inner join 
+flight_ids fid on fd.flight_id=fid.flight_id where
+(fid.source_id=%s and fid.destination_id=%s) and fd.date=%s;"""
                 val = (src,dest,dt)
                 cursor.execute(query_flightno,val)
                 flres = cursor.fetchall()

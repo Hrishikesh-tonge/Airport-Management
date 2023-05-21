@@ -14,8 +14,8 @@ dataFrameSerialization = "legacy"
 # st.title("Admin Login")
 cnx = mysql.connector.connect(
     user="root",
-    #password="Krishna@9011",
-    password="Titanium@1604",
+    password="Krishna@9011",
+    # password="Titanium@1604",
     host="localhost",
     database="airport"
 )

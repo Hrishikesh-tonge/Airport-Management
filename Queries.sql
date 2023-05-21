@@ -130,7 +130,7 @@ insert into userdetails values ("101","Hrishikesh",9999,"hrishiikesh@gmail");
 
 select fd.flight_id,fd.departure_time,fd.arrival_time,fd.price,fd.date,fd.airline from flight_details fd inner join 
 flight_ids fid on fd.flight_id=fid.flight_id where
-fid.source_id="NAG" and fid.destination_id="BLR";
+(fid.source_id="NAG" and fid.destination_id="BLR") and fd.date="";
 
 -- FOR ALL DETAILS 
 SELECT * FROM FLIGHT_DETAILS F1 INNER JOIN FLIGHT_IDS F2 ON F1.FLIGHT_ID=F2.FLIGHT_ID
