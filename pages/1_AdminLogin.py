@@ -21,11 +21,19 @@ cnx = mysql.connector.connect(
 )
 cursor = cnx.cursor()
 def admin(username,password):
-    sql = "select pwd from admin where user_id = %s"
+    sql = "select password from users where username = %s"
     value = (username,)
     cursor.execute(sql,value)
-    pwd = cursor.fetchall()
-    if pwd[0][0] == password:
+    passw = cursor.fetchall()
+   
+    st.write(passw[0][0])
+    sql1 = "select md5(%s)"
+    value1 = (password,)
+    cursor.execute(sql1,value1)
+    md5passw = cursor.fetchall()
+    
+    st.write(md5passw[0][0])
+    if md5passw[0][0] == passw[0][0]:
         return True
     else:
         return False
@@ -80,10 +88,16 @@ with headerSection:
 
                     submit_button=st.form_submit_button(label="Add")
                     if submit_button:
-                        query=('insert into flights' '(FLIGHT_ID,SOURCE,SOURCE_ID,SCITY,DESTINATION,DESTINATION_ID,DESTINATION_CITY,DEPARTURE_TIME,ARRIVAL_TIME,PRICE,DATE,AIRLINE)' 'values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)')
-                        values=(Flight_id,Source,Source_id,Scity,Destination,Destination_id,Destination_City,Departure_time,Arrival_time,Price,Date,Airline)
+                        query=('INSERT INTO FLIGHT_IDS (FLIGHT_ID,SOURCE_ID,DESTINATION_ID)' 'VALUES (%s,%s,%s);')
+                        values=(Flight_id,Source_id,Destination_id)
                         cursor.execute(query,values)
                         cnx.commit()
+                        query=('INSERT INTO FLIGHT_DETAILS(FLIGHT_ID,DEPARTURE_TIME,ARRIVAL_TIME,PRICE,DATE,AIRLINE)' 'VALUES(%s,%s,%s,%s,%s,%s)')
+                        values=(Flight_id,Departure_time,Arrival_time,Price,Date,Airline)
+                        cursor.execute(query,values)
+                        cnx.commit()
+                    
+                        
                         # cursor.close()
                         # cnx.close()
                         # cursor=cnx.cursor()
@@ -98,7 +112,9 @@ with headerSection:
 
             with tab2:
                 if st.button("Show Flights"):
-                    query = "select * from flights"
+                    query = """SELECT * FROM FLIGHT_DETAILS F1 INNER JOIN FLIGHT_IDS F2 ON F1.FLIGHT_ID=F2.FLIGHT_ID
+                                INNER JOIN SOURCE_DEST S ON F2.SOURCE_ID=S.AIRPORT_ID
+                                INNER JOIN SOURCE_DEST S1 ON F2.DESTINATION_ID=S1.AIRPORT_ID;"""
                     cursor.execute(query)
                     flres = cursor.fetchall()
                     st.dataframe(flres)
@@ -109,7 +125,7 @@ with headerSection:
                 f_id=st.text_input("Enter FLIGHT_ID")
                 del_button=st.button(label="Delete")
                 if del_button:
-                    cursor.execute( "delete from flights where FLIGHT_ID='%s'" % f_id)
+                    cursor.execute( "Select delete_flight_details('%s')" % f_id)
                     cnx.commit()
                     st.success("Successfully Deleted Flight {}".format(f_id))
 

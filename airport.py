@@ -224,6 +224,7 @@ def booking():
             # st.button("Book")
             if st.button("Book"):
                 switch_page("Booking")
+        
            
                 
 

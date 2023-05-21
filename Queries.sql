@@ -34,6 +34,7 @@ VALUES('6E5234','10:15','11:40',3750,'2023-06-12','INDIGO'),
 ('6E6984','9:15','11:40',6550,'2023-06-15','JET_AIRWAYS'),
 ('6E7529','15:15','16:40',4550,'2023-06-11','INDIGO');
 
+ALTER TABLE users AUTO_INCREMENT=100;
 
 update flight_details set AIRLINE = 'INDIGO';
 select md5(password) from users where username = "hrishi@gmail.com";
@@ -149,11 +150,11 @@ INNER JOIN SOURCE_DEST S1 ON F2.DESTINATION_ID=S1.AIRPORT_ID WHERE F1.FLIGHT_ID=
 
 -- Stored Procedure Insert
 DELIMITER $$
-CREATE PROCEDURE Insert_Flight_Details(IN F_ID VARCHAR(50),IN D_Time VARCHAR(50),IN A_Time VARCHAR(50),IN PRC VARCHAR(50),IN DATE_From VARCHAR(50),IN AIRLINE_name VARCHAR(50),
+CREATE PROCEDURE Insert_Flight_Details(IN F_ID VARCHAR(50),IN D_Time time,IN A_Time time(50),IN PRC VARCHAR(50),IN DATE_From date,IN AIRLINE_name VARCHAR(50),
 IN S_ID VARCHAR(50),IN D_ID VARCHAR(50))
 BEGIN
 	IF NOT EXISTS (SELECT * FROM flight_details WHERE flight_id=f_id) THEN
-		INSERT INTO FLIGHT_DETAILS(FLIGHT_ID,DEPARTURE_TIME,ARRIVAL_TIME,PRICE,`DATE`,AIRLINE) VALUES(f_id,D_TIME,A_TIME,PRc,DATE_From,AIRLINE_name);
+		INSERT INTO FLIGHT_DETAILS(FLIGHT_ID,DEPARTURE_TIME,ARRIVAL_TIME,PRICE,`DATE`,AIRLINE) VALUES(f_id,D_TIME,A_TIME,PRC,DATE_From,AIRLINE_name);
 		INSERT INTO FLIGHT_IDS (FLIGHT_ID,SOURCE_ID,DESTINATION_ID) VALUES (F_ID,S_ID,D_ID);
     ELSE
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Flight Details already exists';
@@ -161,20 +162,20 @@ BEGIN
 END;
 $$
 DELIMITER ;
--- Stored Procedure Delete
+-- Stored Function Delete
 DELIMITER $$
--- CREATE FUNCTION delete_flight_details(f_id VARCHAR(20))
--- Deterministic
--- RETURNS VARCHAR(50)
--- BEGIN
--- 	IF EXISTS(SELECT * FROM flight_details WHERE flight_id=(SELECT flIGHT_ID FROM flight_ids WHERE flight_id=f_id)) THEN
--- 		DELETE FROM Flight_ids WHERE flight_id=f_id;
--- 		DELETE FROM Flight_details WHERE flight_id=f_id;
--- 	RETURN "Flight Details Deleted Successfully";
--- 	
---     ELSE
--- 	RETURN "WRONG FLIGHT DETAILS";
--- 	END IF;
--- END
--- $$
--- DELIMITER ;
+CREATE FUNCTION delete_flight_details(f_id VARCHAR(20))
+RETURNS VARCHAR(50)
+Deterministic
+BEGIN
+	IF EXISTS(SELECT * FROM flight_details WHERE flight_id=(SELECT flIGHT_ID FROM flight_ids WHERE flight_id=f_id)) THEN
+		DELETE FROM Flight_ids WHERE flight_id=f_id;
+		DELETE FROM Flight_details WHERE flight_id=f_id;
+	RETURN "Flight Details Deleted Successfully";
+	
+    ELSE
+	RETURN "WRONG FLIGHT DETAILS";
+	END IF;
+END
+$$
+DELIMITER ;

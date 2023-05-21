@@ -19,6 +19,7 @@ cursor = cnx.cursor()
 st.header("Booking Preview")
 st.divider()
 if "src1" and "dest1" and "date1" not in st.session_state:
+    st.success("Booking Confirmed")
     switch_page("airport")
 else:
     with st.container():
