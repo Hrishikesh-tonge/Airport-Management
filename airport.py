@@ -19,6 +19,7 @@ today = date.today()
 cnx = mysql.connector.connect(
     user="root",
     password="Krishna@9011",
+    # password="Titanium@1604",
     host="localhost",
     database="airport"
 )
@@ -61,15 +62,13 @@ def booking():
     with bookingSection:
         col1, col2, col3= st.columns(3)
         with col1:
-            src = st.text_input("Enter source")
-            
-        
-                
+            src = st.text_input("Enter source",key="src1")
+                    
         with col2:
-            dest = st.text_input("Destination")
+            dest = st.text_input("Destination", key="dest1")
             
         with col3:
-            dt = st.date_input(label="Travelling Date",min_value=today)
+            dt = st.date_input(label="Travelling Date",min_value=today,key="date1")
         
         if src == "" and dest == "":
             st.error("Enter Source and Destination")
@@ -164,9 +163,6 @@ def booking():
                 st.write('Price Rs.')
                 for row in flres:
                     st.subheader(row[0])
-                    
-
-
                 
                 query_flightno = "select date from flights where (scity = %s and destination_city = %s) and date=%s "
                 val = (src,dest,dt)
@@ -194,39 +190,7 @@ def booking():
             # st.button("Book")
             if st.button("Book"):
                 switch_page("Booking")
-            # with st.form(key='form2'):
-            #             if 'pax' not in st.session_state:
-            #                 st.session_state.pax = 0
-
-            #             st.session_state.pax =st.number_input("Enter Number of passengers",min_value=1,max_value=5,value=int(1))
-            #             query_flightno = "select price from flights where (scity = %s and destination_city = %s) and date=%s "
-            #             val = (src,dest,dt)
-            #             cursor.execute(query_flightno,val)
-            #             flres = cursor.fetchall()
-            #             # st.write('Price Rs.')
-            #             # for row in flres:
-            #             #     pp = (row[0])
-                        
-            #             # st.write(pp)
-            #             # st.write(st.session_state.pax)
-            #             option = st.selectbox(
-            #                 'Select Class',
-            #                 ('Economy', 'Business', 'First Class'))
-                        
-
-            #             st.form_submit_button() 
-            #             if st.form_submit_button():     
-            #                 if 'pax' not in st.session_state:
-            #                     total = int(row[0])*st.session_state.pax
-            #                     st.subheader(int(row[0])*int(st.session_state.pax)) 
-
-                        
-            #                 st.write("hi")            
-                
-            # if "confirmation" not in st.session_state:
-            #     st.session_state["confirmation"] = False
-            # st.button("Book",on_click=BookingClicked)
-            
+           
                 
 
 

@@ -5,6 +5,7 @@ st.title("Sign Up")
 cnx = mysql.connector.connect(
     user="root",
     password="Krishna@9011",
+    # password="Titanium@1604",
     host="localhost",
     database="airport"
 )
@@ -20,8 +21,8 @@ def admin(username,password):
         return False
 
 with st.form(key='form1'):
-                    FIRST_NAME=st.text_input("FIRST_NAME")
-                    LAST_NAME=st.text_input("LAST_NAME")
+                    FIRST_NAME=st.text_input("FIRST_NAME",key="name1")
+                    LAST_NAME=st.text_input("LAST_NAME",key="l_name1")
                     EMAIL_ID=st.text_input("EMAIL_ID")
                     CONTACT_NO=st.text_input("PHONE")
                     PASSWORD=st.text_input(label="Password",type='password')
