@@ -15,16 +15,16 @@ PRICE INT NOT NULL,
 `DATE` DATE NOT NULL,
 AIRLINE VARCHAR(20)
 );
-select airport_name from source_dest where airport_id = "nag";
-desc FLIGHT_DETAILS;
-desc FLIGHT_ids;
-SELECT * FROM FLIGHT_DETAILS;
-select * from FLIGHT_ids;
-select * from source_dest;
+-- select airport_name from source_dest where airport_id = "nag";
+-- desc FLIGHT_DETAILS;
+-- desc FLIGHT_ids;
+-- SELECT * FROM FLIGHT_DETAILS;
+-- select * from FLIGHT_ids;
+-- select * from source_dest;
 select * from userdetails;
 select * from users;
-truncate users;
-truncate userdetails;
+-- truncate users;
+-- truncate userdetails;
 INSERT INTO FLIGHT_DETAILS(FLIGHT_ID,DEPARTURE_TIME,ARRIVAL_TIME,PRICE,`DATE`,AIRLINE) 
 VALUES('6E5234','10:15','11:40',3750,'2023-06-12','INDIGO'),
 ('6E6475','13:15','14:35',4250,'2023-06-08','AIRINDIA'),
@@ -36,9 +36,9 @@ VALUES('6E5234','10:15','11:40',3750,'2023-06-12','INDIGO'),
 
 ALTER TABLE users AUTO_INCREMENT=100;
 
-update flight_details set AIRLINE = 'INDIGO';
-select md5(password) from users where username = "hrishi@gmail.com";
-select md5("hrishi123");
+-- update flight_details set AIRLINE = 'INDIGO';
+-- select md5(password) from users where username = "hrishi@gmail.com";
+-- select md5("hrishi123");
 CREATE TABLE FLIGHT_IDS
 (	
 	FLIGHT_ID VARCHAR(15),
@@ -122,12 +122,6 @@ phone VARCHAR(10) unique key not null,
 -- drop table users;
 ------------------------
 
-insert into users values ("Hrishi",md5("111"),"101");
-
-insert into userdetails values ("101","Hrishikesh",9999,"hrishiikesh@gmail");
-
-
-
 -- ---------------------------------------------------------------------
 
 -- QUERIES
@@ -150,7 +144,7 @@ INNER JOIN SOURCE_DEST S1 ON F2.DESTINATION_ID=S1.AIRPORT_ID WHERE F1.FLIGHT_ID=
 
 -- Stored Procedure Insert
 DELIMITER $$
-CREATE PROCEDURE Insert_Flight_Details(IN F_ID VARCHAR(50),IN D_Time time,IN A_Time time(50),IN PRC VARCHAR(50),IN DATE_From date,IN AIRLINE_name VARCHAR(50),
+CREATE PROCEDURE Insert_Flight_Details(IN F_ID varchar(10),IN D_Time time,IN A_Time time,IN PRC VARCHAR(50),IN DATE_From date,IN AIRLINE_name VARCHAR(50),
 IN S_ID VARCHAR(50),IN D_ID VARCHAR(50))
 BEGIN
 	IF NOT EXISTS (SELECT * FROM flight_details WHERE flight_id=f_id) THEN

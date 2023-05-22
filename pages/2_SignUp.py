@@ -5,7 +5,7 @@ st.title("Sign Up")
 cnx = mysql.connector.connect(
     user="root",
     #password="Krishna@9011",
-    password="Titanium@1604",
+    password="Titanium@16",
     host="localhost",
     database="airport"
 )

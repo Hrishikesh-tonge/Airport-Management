@@ -15,13 +15,13 @@ dataFrameSerialization = "legacy"
 cnx = mysql.connector.connect(
     user="root",
     #password="Krishna@9011",
-     password="Titanium@1604",
+     password="Titanium@16",
     host="localhost",
     database="airport"
 )
-cursor = cnx.cursor()
+cursor = cnx.cursor(buffered=True)
 def admin(username,password):
-    sql = "select password from users where username = %s"
+    sql = "select password from users where username = %s and user_id = 1 "
     value = (username,)
     cursor.execute(sql,value)
     passw = cursor.fetchall()
@@ -74,12 +74,12 @@ with headerSection:
                 st.subheader("Add Flights")
                 with st.form(key='form1'):
                     Flight_id=st.text_input("Flight_id")
-                    Source=st.text_input("Source")
+                    # Source=st.text_input("Source")
                     Source_id=st.text_input("Source_id")
-                    Scity=st.text_input("Scity")
-                    Destination=st.text_input("Destination")
+                    # Scity=st.text_input("Scity")
+                    # Destination=st.text_input("Destination")
                     Destination_id=st.text_input("Destination_id")
-                    Destination_City=st.text_input("Destination_City")
+                    # Destination_City=st.text_input("Destination_City")
                     Departure_time=st.time_input("Departure_time")
                     Arrival_time=st.time_input("Arrival_time")
                     Price=st.text_input("Price")
@@ -88,15 +88,18 @@ with headerSection:
 
                     submit_button=st.form_submit_button(label="Add")
                     if submit_button:
-                        query=('INSERT INTO FLIGHT_IDS (FLIGHT_ID,SOURCE_ID,DESTINATION_ID)' 'VALUES (%s,%s,%s);')
-                        values=(Flight_id,Source_id,Destination_id)
+                        # query=('INSERT INTO FLIGHT_IDS (FLIGHT_ID,SOURCE_ID,DESTINATION_ID)' 'VALUES (%s,%s,%s);')
+                        # values=(Flight_id,Source_id,Destination_id)
+                        # cursor.execute(query,values)
+                        # cnx.commit()
+                        # query=('INSERT INTO FLIGHT_DETAILS(FLIGHT_ID,DEPARTURE_TIME,ARRIVAL_TIME,PRICE,DATE,AIRLINE)' 'VALUES(%s,%s,%s,%s,%s,%s)')
+                        # values=(Flight_id,Departure_time,Arrival_time,Price,Date,Airline)
+                        # cursor.execute(query,values)
+                        # cnx.commit()
+                        query=('call Insert_Flight_Details(%s,%s,%s,%s,%s,%s,%s,%s)' )
+                        values=(Flight_id,Departure_time,Arrival_time,Price,Date,Airline,Source_id,Destination_id)
                         cursor.execute(query,values)
                         cnx.commit()
-                        query=('INSERT INTO FLIGHT_DETAILS(FLIGHT_ID,DEPARTURE_TIME,ARRIVAL_TIME,PRICE,DATE,AIRLINE)' 'VALUES(%s,%s,%s,%s,%s,%s)')
-                        values=(Flight_id,Departure_time,Arrival_time,Price,Date,Airline)
-                        cursor.execute(query,values)
-                        cnx.commit()
-                    
                         
                         # cursor.close()
                         # cnx.close()

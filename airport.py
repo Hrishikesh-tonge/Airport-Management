@@ -19,7 +19,7 @@ today = date.today()
 cnx = mysql.connector.connect(
     user="root",
     # password="Krishna@9011",
-     password="Titanium@1604",
+    password="Titanium@16",
     host="localhost",
     database="airport"
 )
@@ -68,6 +68,11 @@ def incr():
 def booking():
     st.session_state['booking'] = True
     with bookingSection:
+        query_flightno = """select airport_id,city from source_dest;"""
+       
+        cursor.execute(query_flightno)
+        flres = cursor.fetchall()
+        st.dataframe(flres)
         col1, col2, col3= st.columns(3)
         with col1:
             src = st.text_input("Enter source",key="src1")
@@ -207,7 +212,7 @@ def booking():
         with st.container():
             if "option" not in st.session_state:
                 st.session_state.option = ""
-            st.number_input("Enter Number of passengers",key="pass_number",min_value=0,max_value=5,value=int(1))
+            st.number_input("Enter Number of passengers",key="pass_number",min_value=0,max_value=5,value=int(0))
             st.session_state.option = st.selectbox(
                             'Select Class',
                             ('Economy', 'Business', 'First Class'))
